@@ -1,0 +1,18 @@
+[System.Reflection.Assembly]::LoadWithPartialName("Microsoft.AnalysisServices")
+
+$svr = new-object Microsoft.AnalysisServices.Server
+$conn1 = "integrated Security=SSPI;Provider=MSOLAP.3;SSPI=NTLM;MDX Compatibility=2;Data Source=finpwdb001;EffectiveUserName=z3502985"
+$conn2 = "integrated Security=SSPI;Provider=MSOLAP.3;SSPI=NTLM;MDX Compatibility=2;Data Source=finpwdb001;"
+$svr.Connect($conn1)
+
+$dbs = $svr.Databases.GetByName("RAISERS_EDGE")
+
+#$dbs
+#$dbs.Dimensions
+
+
+if ($svr.Connected)
+{
+$svr.Disconnect()
+}
+

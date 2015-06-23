@@ -1,0 +1,15 @@
+
+/* selects the first or last non-empty element of a dimension based on a specified measure */
+
+
+with member [Date].[Day].[First Day] as 
+	Head(Nonempty(existing({[Date].[Day].[Day].Members}, {[Task].[Project].currentmember}),{[Measures].[Value]}),1	).Item(0)
+
+member [Date].[Day].[last Day] as 
+	Tail(Nonempty(existing({[Date].[Day].[Day].Members}, {[Task].[Project].currentmember}),{[Measures].[Value]}),1	).Item(0)
+	
+Select {	[Date].[Day].[First Day], [Date].[Day].[last Day]	} on 0,
+	   {	[Task].[Project].&[CALAU06-06]						} on 1
+from timesheets
+where (	[Measures].[Value]	)
+

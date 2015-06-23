@@ -1,0 +1,3 @@
+﻿CREATE LOGIN [CalumoUser]
+    WITH PASSWORD = N'o|@docglbxwuDnm7fcm4olOnmsFT7_&#$!~<`owxpkNutiAb', SID = 0x500AD51E04D387449A64E07EB38EFA51, DEFAULT_DATABASE = [Calumo11], DEFAULT_LANGUAGE = [us_english];
+

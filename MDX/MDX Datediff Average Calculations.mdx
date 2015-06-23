@@ -1,0 +1,33 @@
+/* 
+
+This query shows the difference between Avg() as calculated by SSAS and an average rate per day from the first date
+
+*/
+
+
+with member [measures].[Avg Rate] as 
+	AVG(([Date].[Day].currentmember.children, [Task].[Project].currentmember) , [measures].[value])
+
+member [measures].[Days Active] as 
+Datediff("d", 	
+	Head(Nonempty({[Date].[Day].[Day].Members}, {[Measures].[Value]})).item(0).name, 
+	Tail(Nonempty({[Date].[Day].[Day].Members}, {[Measures].[Value]})).item(0).name	
+)
+
+member [measures].[Days Avg Rate] as 
+	sum([measures].[value]) / [measures].[Days Active]
+
+
+Select {	
+	[Task].[Project].&[CALAU06-06]	
+	} on 0,	   {	
+		[measures].[Days Active],
+		[measures].[value],
+		[measures].[Days Avg Rate],
+		[Avg Rate] 
+	} on 1
+from timesheets
+
+
+
+

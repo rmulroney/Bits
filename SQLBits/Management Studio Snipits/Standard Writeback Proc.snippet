@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Standard Calumo Writeback</Title>
+      <Description>Stored Procedure Template for Calumo Writeback</Description>
+      <Author> Rm </Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Declarations>
+        <Literal>
+          <ID>tableName</ID>
+          <ToolTip>The Fact Table Traget for Writeback</ToolTip>
+          <Default>FactTransaction</Default>
+        </Literal>
+        <Literal>
+          <ID>Dimension1</ID>
+          <ToolTip>Cube Dimension Name</ToolTip>
+          <Default>entity</Default>
+        </Literal>
+        <Literal>
+          <ID>Dimension2</ID>
+          <ToolTip>Cube Dimension Name</ToolTip>
+          <Default>account</Default>
+        </Literal>
+        <Literal>
+          <ID>Dimension3</ID>
+          <ToolTip>Cube Dimension Name</ToolTip>
+          <Default>subAccount</Default>
+        </Literal>
+        <Literal>
+          <ID>Dimension4</ID>
+          <ToolTip>Cube Dimension Name</ToolTip>
+          <Default>costCentre</Default>
+        </Literal>
+        <Literal>
+          <ID>Dimension5</ID>
+          <ToolTip>Cube Dimension Name</ToolTip>
+          <Default>division</Default>
+        </Literal>
+        <Literal>
+          <ID>Dimension6</ID>
+          <ToolTip>Cube Dimension Name</ToolTip>
+          <Default>date</Default>
+        </Literal>
+        <Literal>
+          <ID>Dimension7</ID>
+          <ToolTip>Cube Dimension Name</ToolTip>
+          <Default>scenario</Default>
+        </Literal>
+        <Literal>
+          <ID>Dimension8</ID>
+          <ToolTip>Relative Period Dimension Name</ToolTip>
+          <Default>RelativePeriod</Default>
+        </Literal>
+        <Literal>
+          <ID>ValueTargetCol</ID>
+          <ToolTip>Measure Column Writeback Target</ToolTip>
+          <Default>Amount</Default>
+        </Literal>
+      </Declarations>
+      <Code Language="SQL">
+        <![CDATA[
+
+CREATE proc [dbo].[spWB$tableName$] (
+ @loginId			varchar(max)
+,@newValue			float
+,@newValueText		varchar(max)
+,@$Dimension1$		varchar(max)
+,@$Dimension2$		varchar(max)
+,@$Dimension3$		varchar(max)
+,@$Dimension4$		varchar(max)
+,@$Dimension5$		varchar(max)
+,@$Dimension6$		varchar(max)
+,@$Dimension7$		varchar(max)
+,@$Dimension8$		varchar(max)
+) as begin 
+
+--$ValueTargetCol$ --> writeback target measure column
+
+--Create tables for hierarchies to which we can write to non-leaf members
+create table #$Dimension1$	($Dimension1$	varchar(250) primary key) 
+create table #$Dimension2$	($Dimension2$	varchar(250) primary key) 
+create table #$Dimension3$	($Dimension3$	varchar(250) primary key) 
+create table #$Dimension4$	($Dimension4$	varchar(250) primary key) 
+create table #$Dimension5$	($Dimension5$	varchar(250) primary key) 
+create table #$Dimension6$	($Dimension6$	varchar(250) primary key) 
+create table #$Dimension7$	($Dimension7$	varchar(250) primary key) 
+
+
+
+declare @count int
+
+if (@$Dimension8$ not in ('0','Current Period')) 
+begin 
+	raiserror('Relative periods other than Current Period are not supported for writeback',17,1) 
+end
+
+--Hierarchies to which we can write to non-leaf members
+insert into #$Dimension1$		exec spGetDataPoint @MemberKeys = @$Dimension1$,	@count = @count output
+insert into #$Dimension2$		exec spGetDataPoint @MemberKeys = @$Dimension2$,	@count = @count output
+insert into #$Dimension3$		exec spGetDataPoint @MemberKeys = @$Dimension3$,	@count = @count output
+insert into #$Dimension4$		exec spGetDataPoint @MemberKeys = @$Dimension4$,	@count = @count output
+insert into #$Dimension5$		exec spGetDataPoint @MemberKeys = @$Dimension5$,	@count = @count output
+insert into #$Dimension6$		exec spGetDataPoint @MemberKeys = @$Dimension6$,	@count = @count output
+insert into #$Dimension7$		exec spGetDataPoint @MemberKeys = @$Dimension7$,	@count = @count output
+
+
+
+--Hierarchies to which we can write to leaf members only
+Declare @i$Dimension1$ int, @i$Dimension2$ int, @i$Dimension3$ int, @i$Dimension4$ int, @i$Dimension5$ int, @i$Dimension6$ int, @i$Dimension7$ int
+
+exec spGetDataPoint @MemberKeys = @$Dimension1$,		@failIfMultiple = 1,	@firstKeyInt = @i$Dimension1$			output, @hierarchyName = '$Dimension1$'
+exec spGetDataPoint @MemberKeys = @$Dimension2$,		@failIfMultiple = 1,	@firstKeyInt = @i$Dimension2$			output, @hierarchyName = '$Dimension2$'
+exec spGetDataPoint @MemberKeys = @$Dimension3$,		@failIfMultiple = 1,	@firstKeyInt = @i$Dimension3$			output, @hierarchyName = '$Dimension3$'
+exec spGetDataPoint @MemberKeys = @$Dimension4$,		@failIfMultiple = 1,	@firstKeyInt = @i$Dimension4$			output, @hierarchyName = '$Dimension4$'
+exec spGetDataPoint @MemberKeys = @$Dimension4$,		@failIfMultiple = 1,	@firstKeyInt = @i$Dimension5$			output, @hierarchyName = '$Dimension5$'
+exec spGetDataPoint @MemberKeys = @$Dimension5$,		@failIfMultiple = 1,	@firstKeyInt = @i$Dimension6$			output, @hierarchyName = '$Dimension6$'
+exec spGetDataPoint @MemberKeys = @$Dimension6$,		@failIfMultiple = 1,	@firstKeyInt = @i$Dimension7$			output, @hierarchyName = '$Dimension7$'
+
+
+--Business rules
+if @$Dimension7$ = 1 raiserror('Writeback not permitted to actuals',16,1)
+
+--Get row count so we can evenly distribute the new value
+select  
+@count = count(*)
+from
+	#$Dimension1$ $Dimension1$ inner join
+	Dim$Dimension1$ a on $Dimension1$.$Dimension1$ = a.$Dimension1$Id --Have to join this in as synthetic members in naturalised hierarchies are not valid
+	cross join
+	#$Dimension2$ $Dimension2$ 	
+	cross join
+	#$Dimension3$ $Dimension3$ 
+	cross join
+	#$Dimension4$ $Dimension4$ 
+	cross join
+	#$Dimension5$ $Dimension5$ 
+	cross join
+	#$Dimension6$ $Dimension6$ 
+	cross join
+	#$Dimension7$ $Dimension7$ 
+	
+--Do the merge
+merge $tableName$ as target using
+(
+select  
+	 @newValue/@count as $ValueTargetCol$
+	,@i$Dimension1$ as $Dimension1$Id
+	,@i$Dimension2$ as $Dimension2$Id
+	,@i$Dimension3$ as $Dimension3$Id
+	,@i$Dimension4$ as $Dimension4$Id
+	,@i$Dimension5$ as $Dimension5$Id
+	,@i$Dimension6$ as $Dimension6$Id
+	,@i$Dimension7$ as $Dimension7$Id
+-- or
+	,$Dimension1$.$Dimension1$ as $Dimension1$Id
+	,$Dimension2$.$Dimension2$ as $Dimension2$Id
+	,$Dimension3$.$Dimension3$ as $Dimension3$Id
+	,$Dimension4$.$Dimension4$ as $Dimension4$Id
+	,$Dimension5$.$Dimension5$ as $Dimension5$Id
+	,$Dimension6$.$Dimension6$ as $Dimension6$Id
+	,$Dimension7$.$Dimension7$ as $Dimension7$Id
+		
+from
+	#$Dimension1$ $Dimension1$ inner join
+	Dim$Dimension1$ a on $Dimension1$.$Dimension1$ = a.$Dimension1$Id --Have to join this in as synthetic members in naturalised hierarchies are not valid
+	cross join
+	#$Dimension2$ $Dimension2$ 	
+	cross join
+	#$Dimension3$ $Dimension3$ 
+	cross join
+	#$Dimension4$ $Dimension4$ 
+	cross join
+	#$Dimension5$ $Dimension5$ 
+	cross join
+	#$Dimension6$ $Dimension6$ 
+	cross join
+	#$Dimension7$ $Dimension7$ 
+
+) as source 
+on
+target.$Dimension1$Id = source.$Dimension1$Id and
+target.$Dimension2$Id = source.$Dimension2$Id and
+target.$Dimension3$Id = source.$Dimension3$Id and
+target.$Dimension4$Id = source.$Dimension4$Id and
+target.$Dimension5$Id = source.$Dimension5$Id and
+target.$Dimension6$Id = source.$Dimension6$Id and
+target.$Dimension7$Id = source.$Dimension7$Id 
+
+when matched then update set 
+target.$ValueTargetCol$ = source.$ValueTargetCol$
+
+when not matched then insert 
+(
+	 
+	 $Dimension1$Id
+	,$Dimension2$Id
+	,$Dimension3$Id
+	,$Dimension4$Id
+	,$Dimension5$Id
+	,$Dimension6$Id
+	,$Dimension7$Id
+	,$ValueTargetCol$
+)
+values
+(
+	 source.$Dimension1$Id
+	,source.$Dimension2$Id
+	,source.$Dimension3$Id
+	,source.$Dimension4$Id
+	,source.$Dimension5$Id
+	,source.$Dimension6$Id
+	,source.$Dimension7$Id
+	,source.$ValueTargetCol$
+);
+
+
+delete from $tableName$ where $ValueTargetCol$ = 0
+
+end
+
+
+]]>
+      </Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

@@ -1,0 +1,47 @@
+with member [Measures].[Location] as ""
+
+-- The set of Divisions 
+set divisions as
+extract([Division].[By State].[State].&[2].&[1]*[Division].[Division].[Division],[Division].[Division])
+
+
+-- loop through the Divisions set and get the employees.division that appear in that set
+-- "Generate" loops through each member of the first set doing the function in the 2nd param. "Currentmember" in this case is the member of the Division set in this loop.
+set empDivisions as
+Generate(divisions,{linkmember([Division].[Division].currentmember,[Employee].[Division])})
+
+
+select 
+{
+[Measures].[Package Inc Super],
+[Measures].[Allocation],
+[Measures].[Location],
+[Measures].[Start Date Serial],
+[Measures].[End Date Serial],
+[Measures].[Hurdle Type Id],
+[Measures].[Hurdle Level0],
+[Measures].[Hurdle Level1],
+[Measures].[Hurdle Level2],
+[Measures].[Hurdle Level3],
+[Measures].[Hurdle Level4],
+[Measures].[Rate0],
+[Measures].[Rate1],
+[Measures].[Rate2],
+[Measures].[Rate3],
+[Measures].[Rate4],
+[Measures].[Commission On]
+}
+on 0,
+
+[employee].[employee].[employee] * empdivisions
+
+on 1
+from [Employee Package]
+where (
+[Date].[Calendar].[Year].&[2014],
+[Scenario].[Scenario].&[2],
+[Division].[By State].[All States],
+[Employee].[Status].&[ACTIVE]
+)
+
+

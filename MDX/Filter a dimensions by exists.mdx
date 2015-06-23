@@ -1,0 +1,33 @@
+with set currentTimesheetPeriod as 
+	[Date].[Timesheet Periods].[Timesheet Period].&[318]
+
+set currentTimesheetPeriods as 
+	currentTimesheetPeriod.item(0).lag(3) : currentTimesheetPeriod.item(0)
+
+select { 
+currentTimesheetPeriod.item(0).children, 
+	currentTimesheetPeriod.item(0)
+} on 0, 
+
+
+ NonEmpty(   
+   
+   [Account].[Property].[Property]
+   *
+   {[Division].[Division].[Division]},
+
+   
+   currentTimesheetPeriods
+   
+   * [measures].hours
+
+   )  
+
+ + ({[Account].[Property].[All]}   *   {[Division].[Division].[All]} )
+
+ on 1
+from timesheets
+ Where (
+[Employee].[Employee].&[7184], 
+[Scenario].[Scenario].&[1]
+)

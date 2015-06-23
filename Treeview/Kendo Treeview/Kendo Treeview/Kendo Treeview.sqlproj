@@ -1,0 +1,124 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>Kendo_Treeview</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{304a17a7-d496-4486-9b94-3f99dab97a54}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql110DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>Kendo_Treeview</RootNamespace>
+    <AssemblyName>Kendo_Treeview</AssemblyName>
+    <ModelCollation>1033,CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+    <DefaultCollation>Latin1_General_CI_AS</DefaultCollation>
+    <DefaultFilegroup>PRIMARY</DefaultFilegroup>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <!-- VS10 without SP1 will not have VisualStudioVersion set, so do that here -->
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <!-- Default to the v10.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">10.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="dbo\" />
+    <Folder Include="dbo\Tables\" />
+    <Folder Include="dbo\Views\" />
+    <Folder Include="Security\" />
+    <Folder Include="dbo\Functions\" />
+    <Folder Include="dbo\Stored Procedures\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="dbo\Tables\DimAccount.sql" />
+    <Build Include="dbo\Tables\DimDate.sql" />
+    <Build Include="dbo\Tables\DimEntity.sql" />
+    <Build Include="dbo\Tables\HierEntity.sql" />
+    <Build Include="dbo\Tables\DimVersion.sql" />
+    <Build Include="dbo\Tables\DNSConnections.sql" />
+    <Build Include="dbo\Tables\HierAccount.sql" />
+    <Build Include="dbo\Tables\myobAccount.sql" />
+    <Build Include="dbo\Tables\myobAccountClassification.sql" />
+    <Build Include="dbo\Tables\myobDataFileInformation.sql" />
+    <Build Include="dbo\Tables\myobJob.sql" />
+    <Build Include="dbo\Tables\myobJournalRecords.sql" />
+    <Build Include="dbo\Tables\myobJournalSets.sql" />
+    <Build Include="dbo\Tables\myobJournalTypes.sql" />
+    <Build Include="dbo\Tables\myobSubAccountTypes.sql" />
+    <Build Include="dbo\Tables\Tally.sql" />
+    <Build Include="dbo\Tables\HierJob.sql" />
+    <Build Include="dbo\Tables\DimJob.sql" />
+    <Build Include="dbo\Tables\FactJournal.sql" />
+    <Build Include="dbo\Tables\FactOpeningBal.sql" />
+    <Build Include="dbo\Tables\wbFactBudget.sql" />
+    <Build Include="dbo\Views\vwHierAccount.sql" />
+    <Build Include="dbo\Views\vwHierEntity.sql" />
+    <Build Include="dbo\Views\vwDimAccount.sql" />
+    <Build Include="dbo\Views\vwDimEntity.sql" />
+    <Build Include="dbo\Views\vwDimDate.sql" />
+    <Build Include="dbo\Views\vwDimVersion.sql" />
+    <Build Include="dbo\Views\vwFactJournals.sql" />
+    <Build Include="dbo\Views\vwRelativePeriod.sql" />
+    <Build Include="dbo\Views\vwHierJob.sql" />
+    <Build Include="dbo\Views\vwDimJob.sql" />
+    <Build Include="Security\CalumoUser.sql" />
+    <Build Include="Security\CalumoUser_1.sql" />
+    <Build Include="Security\RoleMemberships.sql" />
+    <Build Include="dbo\Functions\fnSplitParameters2.sql" />
+    <Build Include="dbo\Stored Procedures\_ReturnJSON.sql" />
+    <Build Include="dbo\Stored Procedures\spBuildNaturalisedHierarchySQL.sql" />
+    <Build Include="dbo\Stored Procedures\spBuildOpeningBalances.sql" />
+    <Build Include="dbo\Stored Procedures\spClearSourceData.sql" />
+    <Build Include="dbo\Stored Procedures\spCreateDimAccount.sql" />
+    <Build Include="dbo\Stored Procedures\spCreateDimDate.sql" />
+    <Build Include="dbo\Stored Procedures\spCreateDimEntity.sql" />
+    <Build Include="dbo\Stored Procedures\spCreateDimJob.sql" />
+    <Build Include="dbo\Stored Procedures\spCreateDimVersion.sql" />
+    <Build Include="dbo\Stored Procedures\spCreateTally.sql" />
+    <Build Include="dbo\Stored Procedures\spFactData.sql" />
+    <Build Include="dbo\Stored Procedures\spMissingAccounts.sql" />
+    <Build Include="dbo\Stored Procedures\spProcessAccountDim.sql" />
+    <Build Include="dbo\Stored Procedures\spMapNewAccountHier.sql" />
+    <Build Include="dbo\Stored Procedures\spMapAccountHier.sql" />
+    <Build Include="dbo\Stored Procedures\spProcessBudgetPartition.sql" />
+    <Build Include="dbo\Stored Procedures\spwbBudget.sql" />
+    <Build Include="dbo\Stored Procedures\spDrillGlBalance.sql" />
+  </ItemGroup>
+</Project>

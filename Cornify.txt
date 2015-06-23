@@ -1,0 +1,1 @@
+'<script type="text/javascript" src="https://cloud.calumo.com/assets/js/cornify.js"></script><script type="text/javascript">setInterval('cornify_add()',2000);</script>

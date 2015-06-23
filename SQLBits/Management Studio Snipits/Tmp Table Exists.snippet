@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>TmpTable-Exists</Title>
+      <Description> Tmp Table Exists. </Description>
+      <Author> Rm </Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Declarations>
+        <Literal>
+          <ID>TempTableName</ID>
+          <ToolTip>The name of the Temp Table</ToolTip>
+          <Default>TmpTable</Default>
+        </Literal>
+      </Declarations>
+      <Code Language="SQL">
+        <![CDATA[
+IF OBJECT_ID('tempdb..#$TempTableName$') IS NOT NULL
+    DROP TABLE #$TempTableName$
+
+]]>
+      </Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

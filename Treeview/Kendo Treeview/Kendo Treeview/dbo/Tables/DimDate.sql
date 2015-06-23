@@ -1,0 +1,25 @@
+﻿CREATE TABLE [dbo].[DimDate] (
+    [dateId]            INT          NOT NULL,
+    [dateDesc]          VARCHAR (11) NOT NULL,
+    [year]              INT          NOT NULL,
+    [yearMonth]         INT          NOT NULL,
+    [yearMonthDesc]     VARCHAR (8)  NOT NULL,
+    [yearQuarter]       INT          NOT NULL,
+    [yearQuarterDesc]   VARCHAR (7)  NOT NULL,
+    [fiscalYear]        INT          NOT NULL,
+    [fiscalYearDesc]    VARCHAR (10) NOT NULL,
+    [fiscalYearQuarter] VARCHAR (13) NOT NULL,
+    [monthOfYear]       INT          NOT NULL,
+    [monthOfYearDesc]   VARCHAR (9)  NOT NULL,
+    [dayOfMonth]        INT          NOT NULL,
+    [dayOfWeek]         INT          NOT NULL,
+    [dayOfWeekDesc]     VARCHAR (9)  NOT NULL,
+    [dayOfWeekType]     VARCHAR (7)  NOT NULL,
+    [weekOfYear]        INT          NOT NULL,
+    [yearWeek]          INT          NOT NULL,
+    [yearWeekDesc]      VARCHAR (10) NOT NULL,
+    [serialDate]        INT          NOT NULL,
+    [date]              DATE         NOT NULL,
+    CONSTRAINT [PK_DimDate] PRIMARY KEY CLUSTERED ([dateId] ASC)
+);
+
